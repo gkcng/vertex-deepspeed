@@ -1,17 +1,36 @@
 #!/bin/bash
+#
+# Copyright 2023 Google LLC
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     https://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 
 ############
 # This script and several scripts it directly calls assumes it is running inside a Vertex Custom Training cluster [1].
 # 
-# IMPORTANT: It is expecting two environmental variables:
+#   By default the training script to execute after the cluster is setup is train.sh. 
+#   You can provide your own with $1.
+#
+# IMPORTANT: It is expecting four environmental variables:
 #
 #   CLUSTER_SPEC  - Descriptor of the cluster. See doc for an example [2] 
 #                   The code-blocks are contingent on having something to so, without a CLUSTER_SPEC to trigger,
 #                   the code will simply EXIT but will not have done anything.
 #
-#   AIP_MODEL_DIR - AI Platform Model Output GCS Path [3], of the form gs://<bucket>/<job>/model/
-#   
-# 
+#   AIP_MODEL_DIR           - AI Platform GCS Path for saving model artifacts, of the form gs://<bucket>/<base-output-path>/model/
+#   AIP_CHECKPOINT_DIR      - AI Platform GCS Path for saving checkpoints, of the form gs://<bucket>/<base-output-path>/checkpoints/
+#   AIP_TENSORBOARD_LOG_DIR - AI Platform GCS Path for saving TensorBoard logs, of the form gs://<bucket>/<base-output-path>/logs/
+#
 # Two file-based flags is set for convenience for other scripts:
 #
 #   .is_vertex_primary - The primary node will have this file.
@@ -28,11 +47,25 @@
 # [3] https://cloud.google.com/vertex-ai/docs/training/code-requirements
 #
 #
+TRAIN_SCRIPT="train.sh"
+if [[ -n "$1" ]];             then TRAIN_SCRIPT=$1; fi
+
 if [[ -z ${NODES_FILE} ]];    then NODES_FILE="nodes"; fi
 if [[ -z ${DS_HOSTFILE} ]];   then DS_HOSTFILE="hostfile"; fi
 if [[ -z ${IS_PRIMARY} ]];    then IS_PRIMARY=".is_vertex_primary"; fi
 if [[ -z ${IS_MULTINODE} ]];  then IS_MULTINODE=".is_multinode"; fi
-if [[ -z ${OUTPUT_FOLDER} ]]; then OUTPUT_FOLDER=run_$(date "+%Y%m%d-%H%M%S"); fi
+
+#
+# Maps the Vertex CustomJob GCS locations to the local FUSE dir supported by Vertex.
+# 
+if [[ -z ${OUTPUT_FOLDER} ]]; then OUTPUT_FOLDER=$(echo ${AIP_MODEL_DIR} | sed -E 's|^gs:/|/gcs|' -e 's|/$||'); fi
+if [[ -z ${CHKPTS_FOLDER} ]]; then CHKPTS_FOLDER=$(echo ${AIP_CHECKPOINT_DIR} | sed -E -e 's|^gs:/|/gcs|' -e 's|/$||'); fi
+if [[ -z ${JOBLOG_FOLDER} ]]; then JOBLOG_FOLDER=$(echo ${AIP_TENSORBOARD_LOG_DIR} | sed -E -e 's|^gs:/|/gcs|' -e 's|/$||'); fi
+if [ -d "/gcs" ]; then # Create the folder under test conditions
+    sudo mkdir -p ${OUTPUT_FOLDER}; sudo chmod 777 -R ${OUTPUT_FOLDER}
+    sudo mkdir -p ${CHKPTS_FOLDER}; sudo chmod 777 -R ${CHKPTS_FOLDER}
+    sudo mkdir -p ${JOBLOG_FOLDER}; sudo chmod 777 -R ${JOBLOG_FOLDER}
+fi
 
 # Checking the account running this
 echo Service Account: $(gcloud config get account)
@@ -44,12 +77,8 @@ if [ -n "${TESTING}" ]; then
     echo "* Testing an example CLUSTER_SPEC and GCS $AIP_MODEL_DIR, ssh_setup not executed."
     echo "*"
     CLUSTER_SPEC='{"cluster":{"workerpool0":["workerpool0-9b6f87bcee-0:2222"],"workerpool1":["workerpool1-9b6f87bcee-0:2222","workerpool1-9b6f87bcee-1:2222"]},"task":{"type":"workerpool0","index":0}}'
-    if [ -n ${AIP_MODEL_DIR} ]; then 
-        echo gsutil ls ${AIP_MODEL_DIR} ...
-        gsutil ls ${AIP_MODEL_DIR}
-    else
-        echo "\$AIP_MODEL_DIR is empty"
-    fi
+    sudo mkdir -p ${OUTPUT_FOLDER} # If ran under Vertex GCS is mounted at /gcs/
+    sudo chmod 777 -R ${OUTPUT_FOLDER}
 fi
 
 ####
@@ -100,34 +129,17 @@ if [ -f "${IS_PRIMARY}" ]; then
         ./gen_hostfile.sh ${NODES_FILE} ${DS_HOSTFILE} # Results stored in ${DS_HOSTFILE}
         echo "Generated:" ${DS_HOSTFILE}
         cat ${DS_HOSTFILE}
+        if [ -n "${TESTING}" ]; then rm -f ${DS_HOSTFILE}; echo "Clean up the test."; fi # Clean up - removing the generated file.
     fi
     
-    if [ -f "train.sh" ]; then 
+    if [ -f "${TRAIN_SCRIPT}" ]; then 
         
         ################
         # Put your Deepspeed training code in train.sh
         ################
-        bash train.sh ${DS_HOSTFILE} ${IS_MULTINODE} ${OUTPUT_FOLDER}
-        
-        if [ $? -eq 0 ]; then
-            echo
-            echo "*****"
-            echo Exporting to GCS
-            echo "*****"
-            echo
-            if [[ -z ${AIP_MODEL_DIR} ]]; then
-                echo "No GCS Output Bucket Specified"
-            else
-                if [ -d "${OUTPUT_FOLDER}" ] && [ $(ls -A "${OUTPUT_FOLDER}" | wc -l) -ne 0 ]; then
-                    echo gsutil cp -R ${OUTPUT_FOLDER}/* ${AIP_MODEL_DIR}
-                    gsutil cp -R ${OUTPUT_FOLDER}/* ${AIP_MODEL_DIR}
-                else
-                    echo "No output generated."
-                fi
-            fi
-        fi    
+        bash ${TRAIN_SCRIPT} "${DS_HOSTFILE}" "${IS_MULTINODE}" "${OUTPUT_FOLDER}" "${CHKPTS_FOLDER}" "${JOBLOG_FOLDER}"
+
+        if [ -n "${TESTING}" ]; then ./to_gcs.sh ${OUTPUT_FOLDER} ${AIP_MODEL_DIR}; fi    
     fi    
     
 fi
-
-
