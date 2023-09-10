@@ -36,6 +36,7 @@ The DeepSpeed-Chat code supports Llama-2-xxb-hf versions of the Llama-2 models f
 4. Put the token content into a file e.g. `token`
 5. Uncomment the COPY token ... line in the dockerfile to include it in the container.
 
+See the recent [improvement update](https://github.com/microsoft/DeepSpeed/blob/master/blogs/deepspeed-chat/ds-chat-release-8-31/README.md) from DeepSpeed-Chat on Llama-2 support.
 
 # Set up
 

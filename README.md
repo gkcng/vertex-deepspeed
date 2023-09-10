@@ -1,6 +1,6 @@
 # Distributed training with DeepSpeed on Vertex AI
 
-This repository makes it simple to use DeepSpeed for multi-node multi-GPUs model training on Google Cloud Vertex AI.
+This repository makes it simple to use [DeepSpeed](https://www.deepspeed.ai/) for multi-node multi-GPUs model training on [Vertex AI](https://cloud.google.com/vertex-ai/docs/training/overview).
 
 It provides the scripts to build a custom container for training large models across multiple nodes and multi-GPUs supporting DeepSpeed. The container is deployed across a pool of worker nodes as a Vertex AI [`CustomJob`](https://cloud.google.com/vertex-ai/docs/training/create-custom-job), and the job in turn can be part of a Vertex training pipeline. 
 
