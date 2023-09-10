@@ -59,7 +59,4 @@ The DeepSpeed-Chat code supports Llama-2-xxb-hf versions of the Llama-2 models f
 4. Put the token content into a file e.g. `token`
 5. Uncomment the COPY token ... line in the dockerfile to include it in the container.
 
-Trying meta-llama/Llama-2-7b-hf
-2xa2-highgpu-4g, total of 4 A10040GBs
-100% of Dahoas/synthetic-instruct-gptj-pairwise
-Batch size of 4
+
