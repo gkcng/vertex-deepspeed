@@ -36,7 +36,7 @@ RUN apt-get update \
 #
 # Should only use 2222
 ENV SSH_PORT=2222 
-COPY scripts/sshd_config.sed /tmp
+COPY config/sshd_config.sed /tmp
 RUN sed -i -E -f /tmp/sshd_config.sed /etc/ssh/sshd_config
 # RUN cat /etc/ssh/sshd_config
 RUN sed -E -i 's/^(PATH=.*)/#\1/' /etc/environment
@@ -53,14 +53,9 @@ USER vertex
 RUN mkdir -m 700 -p .ssh
 
 ########################
-# Base scripts for inter node communication
-
-COPY scripts/*.sh ./
-
-########################
 # Installing Huggingface and Deepspeed related packages
 
-COPY requirements.txt requirements.txt
+COPY config/requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 RUN DS_BUILD_CPU_ADAM=1 DS_BUILD_FUSED_ADAM=1 \
@@ -69,11 +64,17 @@ RUN DS_BUILD_CPU_ADAM=1 DS_BUILD_FUSED_ADAM=1 \
     DS_BUILD_UTILS=1 DS_BUILD_SPARSE_ATTN=0 \
     pip install "deepspeed<0.10.0" --global-option="build_ext"
 
-RUN mkdir -p .cache/huggingface
-COPY token .cache/huggingface/token
+########################
+# Base scripts for inter node communication
+
+COPY scripts/*.sh ./
 
 ########################
 # Application Set up
+
+RUN mkdir -p .cache/huggingface
+# You may need a huggingface read access token for certain assets.
+# COPY token .cache/huggingface/token
 
 # DeepSpeed-Chat
 COPY third_party/deepspeed_examples/utils utils

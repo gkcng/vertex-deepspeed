@@ -35,7 +35,7 @@ RUN apt-get update \
 #
 # Should only use 2222
 ENV SSH_PORT=2222 
-COPY sshd_config.sed /tmp
+COPY config/sshd_config.sed /tmp
 RUN sed -i -E -f /tmp/sshd_config.sed /etc/ssh/sshd_config
 # RUN cat /etc/ssh/sshd_config
 RUN sed -E -i 's/^(PATH=.*)/#\1/' /etc/environment

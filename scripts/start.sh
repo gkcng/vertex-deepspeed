@@ -58,10 +58,10 @@ if [[ -z ${IS_MULTINODE} ]];  then IS_MULTINODE=".is_multinode"; fi
 #
 # Maps the Vertex CustomJob GCS locations to the local FUSE dir supported by Vertex.
 # 
-if [[ -z ${OUTPUT_FOLDER} ]]; then OUTPUT_FOLDER=$(echo ${AIP_MODEL_DIR} | sed -E 's|^gs:/|/gcs|' -e 's|/$||'); fi
+if [[ -z ${OUTPUT_FOLDER} ]]; then OUTPUT_FOLDER=$(echo ${AIP_MODEL_DIR} | sed -E -e 's|^gs:/|/gcs|' -e 's|/$||'); fi
 if [[ -z ${CHKPTS_FOLDER} ]]; then CHKPTS_FOLDER=$(echo ${AIP_CHECKPOINT_DIR} | sed -E -e 's|^gs:/|/gcs|' -e 's|/$||'); fi
 if [[ -z ${JOBLOG_FOLDER} ]]; then JOBLOG_FOLDER=$(echo ${AIP_TENSORBOARD_LOG_DIR} | sed -E -e 's|^gs:/|/gcs|' -e 's|/$||'); fi
-if [ -d "/gcs" ]; then # Create the folder under test conditions
+if [ ! -d "/gcs" ]; then # Create the folder under test conditions
     sudo mkdir -p ${OUTPUT_FOLDER}; sudo chmod 777 -R ${OUTPUT_FOLDER}
     sudo mkdir -p ${CHKPTS_FOLDER}; sudo chmod 777 -R ${CHKPTS_FOLDER}
     sudo mkdir -p ${JOBLOG_FOLDER}; sudo chmod 777 -R ${JOBLOG_FOLDER}
@@ -115,7 +115,7 @@ fi
 # For primary this script returns here.
 #
 if [[ -f ${IS_MULTINODE} && -z "${TESTING}" ]]; then
-    ./ssh_setup.sh ${NODES_FILE} ${IS_PRIMARY}
+    bash ./ssh_setup.sh ${NODES_FILE} ${IS_PRIMARY}
 fi
 
 ####
@@ -126,7 +126,7 @@ if [ -f "${IS_PRIMARY}" ]; then
 
     if [ -f ${IS_MULTINODE} ]; then
         echo "Generating ${DS_HOSTFILE}..."    
-        ./gen_hostfile.sh ${NODES_FILE} ${DS_HOSTFILE} # Results stored in ${DS_HOSTFILE}
+        bash ./gen_hostfile.sh ${NODES_FILE} ${DS_HOSTFILE} # Results stored in ${DS_HOSTFILE}
         echo "Generated:" ${DS_HOSTFILE}
         cat ${DS_HOSTFILE}
         if [ -n "${TESTING}" ]; then rm -f ${DS_HOSTFILE}; echo "Clean up the test."; fi # Clean up - removing the generated file.
@@ -139,7 +139,7 @@ if [ -f "${IS_PRIMARY}" ]; then
         ################
         bash ${TRAIN_SCRIPT} "${DS_HOSTFILE}" "${IS_MULTINODE}" "${OUTPUT_FOLDER}" "${CHKPTS_FOLDER}" "${JOBLOG_FOLDER}"
 
-        if [ -n "${TESTING}" ]; then ./to_gcs.sh ${OUTPUT_FOLDER} ${AIP_MODEL_DIR}; fi    
+        if [ -n "${TESTING}" ]; then bash ./to_gcs.sh ${OUTPUT_FOLDER} ${AIP_MODEL_DIR}; fi    
     fi    
     
 fi
