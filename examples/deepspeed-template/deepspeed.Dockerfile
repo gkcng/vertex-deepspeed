@@ -62,7 +62,7 @@ RUN DS_BUILD_CPU_ADAM=1 DS_BUILD_FUSED_ADAM=1 \
     DS_BUILD_FUSED_LAMB=1 DS_BUILD_TRANSFORMER=1 \
     DS_BUILD_TRANSFORMER_INFERENCE=1 DS_BUILD_STOCHASTIC_TRANSFORMER=1 \
     DS_BUILD_UTILS=1 DS_BUILD_SPARSE_ATTN=0 \
-    pip install "deepspeed<0.10.0" --global-option="build_ext"
+    pip install "deepspeed==0.10.2" --global-option="build_ext"
 
 ########################
 # Base scripts for inter node communication
