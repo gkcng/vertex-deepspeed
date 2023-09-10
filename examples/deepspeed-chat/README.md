@@ -35,7 +35,7 @@ You are ready to try the [example](../../examples/deepspeed-chat/Vertex_Deepspee
 
 ## What you should expect
 
-As a test, with 2 n1-standard-4 nodes each with 1 T4, it takes 5-10 minutes to ran 10% of the training data against `facebook/opt-125m`, with a batch size between 8-32. The example includes a pre and post perplexity evaluation:
+As a test, with 2 n1-standard-4 nodes each with 1 T4, it takes 5-10 minutes to run 10% of the training data against `facebook/opt-125m`, with a batch size between 8-32. The example includes a pre and post perplexity evaluation:
 
 At the beginning of the run:
 ![Starting PPL](../../img/opt-125m-ppl_begin.png)
@@ -52,3 +52,8 @@ The DeepSpeed-Chat code supports Llama-2-xxb-hf versions of the Llama-2 models f
 3. Create a read token from your [HF account](https://huggingface.co/settings/tokens)
 4. Put the token content into a file e.g. `token`
 5. Uncomment the COPY token ... line in the dockerfile to include it in the container.
+
+Trying meta-llama/Llama-2-7b-hf
+2xa2-highgpu-4g, total of 4 A10040GBs
+100% of Dahoas/synthetic-instruct-gptj-pairwise
+Batch size of 4
