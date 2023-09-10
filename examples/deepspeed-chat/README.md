@@ -32,6 +32,18 @@ drwxr-xr-x  9 user  group    288 Sep  9 14:47 utils
 
 You are ready to try the [example](../../examples/deepspeed-chat/Vertex_DeepspeedChat.ipynb)
 
+
+## What you should expect
+
+As a test, with 2 n1-standard-4 nodes each with 1 T4, it takes 5-10 minutes to ran 10% of the training data against `facebook/opt-125m`, with a batch size between 8-32. The example includes a pre and post perplexity evaluation:
+
+At the beginning of the run:
+![Starting PPL](../../img/opt-125m-ppl_begin.png)
+
+At the end of the run:
+![End PPL](../../img/opt-125m-ppl_end.png)
+
+
 ## Llama-2 Models
 
 The DeepSpeed-Chat code supports Llama-2-xxb-hf versions of the Llama-2 models from Huggingface. To try models such as `meta-llama/Llama-2-7b-hf`:
