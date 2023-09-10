@@ -11,16 +11,21 @@ As a test, with 2 n1-standard-4 nodes each with 1 T4, it takes 5-10 minutes to r
 
 At the beginning of the run:
 
-<img src="../../img/opt-125m-ppl_begin.png"  width="1382" height="338"> 
+<div align="center">
+  <img src="../../img/opt-125m-ppl_begin.png"  width="1382px" height="338px"/> 
+</div>
 
 At the end of the run:
 
-<img src="../../img/opt-125m-ppl_end.png"  width="1851" height="826">
+<div align="center">
+  <img src="../../img/opt-125m-ppl_end.png"  width="1851px" height="826px"/>
+</div>
 
 Its TensorBoard:
 
-<img src="../../img/opt-125m-tb.png"  width="1738" height="1670">
-
+<div align="center">
+  <img src="../../img/opt-125m-tb.png"  width="1738px" height="1670px"/>
+</div>
 
 ## Llama-2 Models
 
