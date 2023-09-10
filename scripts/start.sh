@@ -92,7 +92,7 @@ if [ -n "$CLUSTER_SPEC" ]; then
     echo "Parsing Cluster Spec..."
     PRIMARY=$(echo $CLUSTER_SPEC | jq -r ".cluster.workerpool0[]")
     echo $PRIMARY >> $NODES_FILE
-    echo $CLUSTER_SPEC | jq -r ".cluster.workerpool1[]" >> $NODES_FILE
+    echo $CLUSTER_SPEC | jq -r ".cluster.workerpool1[]?" >> $NODES_FILE
     node_index=$(echo $CLUSTER_SPEC | jq -r '.task | {type, index} | join(" ")')
     if [ "workerpool0 0" == "$node_index" ]; then touch ${IS_PRIMARY}; fi
     if [[ $(wc -l <${NODES_FILE}) -gt 1 ]]; then touch ${IS_MULTINODE}; fi
