@@ -38,10 +38,16 @@ You are ready to try the [example](../../examples/deepspeed-chat/Vertex_Deepspee
 As a test, with 2 n1-standard-4 nodes each with 1 T4, it takes 5-10 minutes to run 10% of the training data against `facebook/opt-125m`, with a batch size between 8-32. The example includes a pre and post perplexity evaluation:
 
 At the beginning of the run:
+
 ![Starting PPL](../../img/opt-125m-ppl_begin.png)
 
 At the end of the run:
+
 ![End PPL](../../img/opt-125m-ppl_end.png)
+
+Its TensorBoard:
+
+![Tensorboard](../../img/opt-125m-tb.png)
 
 
 ## Llama-2 Models
