@@ -20,7 +20,7 @@ To use this repository, choose one of the examples. Three examples are provided.
 
 1. A [template](examples/deepspeed-template) DeepSpeed container to be customized with your code. Fill in your training code in `deepspeed_train.sh` and build the container.
 1. A fully functioning [example](examples/deepspeed-chat) executing a single fine tuning epoch with LLMs like OPT-125m and Llama-2. The code is adopted from [DeepSpeed-Chat](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat), specifically, [Step-1 Supervised Fine Tuning](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat/training/step1_supervised_finetuning). DeepSpeed-Chat is a general system framework for enabling an end-to-end training experience for ChatGPT-like models. It uses other popular model development libraries like `datasets`, `sentencepiece`, `accelerate`, and `transformers`. See the [README](examples/deepspeed-chat/README.md) on which part of the code to bring over.
-1. The basic [ssh-only](examples/deepspeed-template) multi-node set up without DeepSpeed and its dependencies. Use this template for your own multi-node training development on Vertex AI. The out of the box script will build and deploy without any training code. Deploy it with `enable_web_access=True` to verify the inter-node communication. The deployed cluster will be in an idle state for inspection and debugging. The `nodes` file in the home directory contains the hostnames of the cluster.
+1. The basic [ssh-only](examples/ssh-only) multi-node set up without DeepSpeed and its dependencies. Use this template for multi-node development with inter-node ssh access on Vertex AI. The out of the box script will build and deploy without any training code. Deploy it with `enable_web_access=True` to verify the inter-node communication. The deployed cluster will be in an idle state for inspection and debugging. The `nodes` file in the home directory contains the hostnames of the cluster.
 
 
 ## Instructions
@@ -46,8 +46,17 @@ To use the image:
 ```sh
 $ docker push ${IMAGE_URI}
 ```
-and reference the URI in the CustomJob creation.
 
+and reference the URI in the CustomJob creation (See notebook examples).
+
+```
+   ...
+   "container_spec": {
+       "image_uri": IMAGE_URI,
+       ...
+   }, 
+   ...       
+```
 
 ## [OPTIONAL] Use Vertex AI TensorBoard with custom training
 
