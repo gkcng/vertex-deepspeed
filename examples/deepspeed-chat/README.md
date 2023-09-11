@@ -38,6 +38,32 @@ The DeepSpeed-Chat code supports Llama-2-xxb-hf versions of the Llama-2 models f
 
 See the recent [improvement update](https://github.com/microsoft/DeepSpeed/blob/master/blogs/deepspeed-chat/ds-chat-release-8-31/README.md) from DeepSpeed-Chat on Llama-2 support.
 
+
+A test run with `meta-llama/Llama-2-7b-hf`:
+
+* 2x a2-highgpu-4g, each has 4 A10040GBs. 
+* Took 1.5 hrs running 50% of the `Dahoas/synthetic-instruct-gptj-pairwise` dataset:
+* Batch size 4, Zero Stage 3, Offload disabled.
+
+At the beginning of the run:
+
+<div align="center">
+  <img src="../../img/llama-2-7b-hf-ppl_begin.png"  width="700px"/> 
+</div>
+
+At the end of the run:
+
+<div align="center">
+  <img src="../../img/llama-2-7b-hf-ppl_end.png"  width="900px"/>
+</div>
+
+Its TensorBoard:
+
+<div align="center">
+  <img src="../../img/llama-2-7b-hf-tb.png"  width="900px"/>
+</div>
+
+
 # Set up
 
 ## Bringing over training code from DeepSpeed-Chat
