@@ -1,6 +1,8 @@
 # Distributed training with DeepSpeed on Vertex AI
 
-This repository provides the scripts to build a custom container for training large models across multiple nodes and multi-GPUs supporting DeepSpeed. The container is deployed across a pool of worker nodes as a Vertex AI [`CustomJob`](https://cloud.google.com/vertex-ai/docs/training/create-custom-job), and the job in turn can be part of a Vertex training pipeline. 
+This repository makes it simple to use [DeepSpeed](https://www.deepspeed.ai/) for multi-node multi-GPUs model training on [Vertex AI](https://cloud.google.com/vertex-ai/docs/training/overview).
+
+It provides the scripts to build a custom container for training large models across multiple nodes and multi-GPUs supporting DeepSpeed. The container is deployed across a pool of worker nodes as a Vertex AI [`CustomJob`](https://cloud.google.com/vertex-ai/docs/training/create-custom-job), and the job in turn can be part of a Vertex training pipeline. 
 
 Once the nodes are provisioned, the container automatically establishes passwordless authentication between the primary and the worker nodes, and generate the necessary hostfile for DeepSpeed. 
 
@@ -20,7 +22,7 @@ To use this repository, choose one of the examples. Three examples are provided.
 
 1. A [template](examples/deepspeed-template) DeepSpeed container to be customized with your code. Fill in your training code in `deepspeed_train.sh` and build the container.
 1. A fully functioning [example](examples/deepspeed-chat) executing a single fine tuning epoch with LLMs like OPT-125m and Llama-2. The code is adopted from [DeepSpeed-Chat](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat), specifically, [Step-1 Supervised Fine Tuning](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat/training/step1_supervised_finetuning). DeepSpeed-Chat is a general system framework for enabling an end-to-end training experience for ChatGPT-like models. It uses other popular model development libraries like `datasets`, `sentencepiece`, `accelerate`, and `transformers`. See the [README](examples/deepspeed-chat/README.md) on which part of the code to bring over.
-1. The basic [ssh-only](examples/deepspeed-template) multi-node set up without DeepSpeed and its dependencies. Use this template for your own multi-node training development on Vertex AI. The out of the box script will build and deploy without any training code. Deploy it with `enable_web_access=True` to verify the inter-node communication. The deployed cluster will be in an idle state for inspection and debugging. The `nodes` file in the home directory contains the hostnames of the cluster.
+1. The basic [ssh-only](examples/ssh-only) multi-node set up without DeepSpeed and its dependencies. Use this template for your own multi-node development on Vertex AI. The out of the box script will build and deploy without any training code. Deploy it with `enable_web_access=True` to verify the inter-node communication. The deployed cluster will be in an idle state for inspection and debugging. The `nodes` file in the home directory contains the hostnames of the cluster.
 
 
 ## Instructions
@@ -46,8 +48,17 @@ To use the image:
 ```sh
 $ docker push ${IMAGE_URI}
 ```
-and reference the URI in the CustomJob creation.
 
+and reference the URI in the CustomJob creation (See notebook examples).
+
+```
+   ...
+   "container_spec": {
+       "image_uri": IMAGE_URI,
+       ...
+   }, 
+   ...       
+```
 
 ## [OPTIONAL] Use Vertex AI TensorBoard with custom training
 
@@ -61,9 +72,11 @@ See the notebook [DeepSpeed-Chat example](examples/deepspeed-chat/Vertex_Deepspe
 
 ## Other DeepSpeed + Vertex AI Projects
 
+This is not an officially supported Google product. Please see [CONTRIBUTING](CONTRIBUTING.md) if you would like to contribute to this repo. 
+
 Here are other DeepSpeed examples from Google Cloud.
 
-### Training Large Language Models on Google Cloud 
+### 1. Training Large Language Models on Google Cloud 
 
 [`llm-pipeline-examples`](https://github.com/GoogleCloudPlatform/llm-pipeline-examples) is another example on multi-node distributed training with DeepSpeed on Google Cloud. The approach differs in its cluster provisioning method. 
 
@@ -79,7 +92,7 @@ Using the CPT tool to provision in your project has the following benefits:
 2. Larger GPU clusters needed more custom networking configuration (e.g. multi NIC); Requires control over the network to be able to run these configurations.
 
 
-### Fine-tuning FLAN-T5 XXL with DeepSpeed and Vertex AI
+### 2. Fine-tuning FLAN-T5 XXL with DeepSpeed and Vertex AI
 
 This [article](https://medium.com/google-cloud/fine-tuning-flan-t5-xxl-with-deepspeed-and-vertex-ai-af499daf694d) shows how to fine-tune a FLAN-T5 XXL model (11B parameters) using a single a2-highgpu-8g (680 GB RAM, 96 vCPU) machine with 8xA100 GPUs with Vertex AI Custom Training. The code is on this [repo](https://github.com/rafaelsf80/vertex-flant5xxl-multitask-finetuning). 
 

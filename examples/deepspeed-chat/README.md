@@ -11,16 +11,21 @@ As a test, with 2 n1-standard-4 nodes each with 1 T4, it takes 5-10 minutes to r
 
 At the beginning of the run:
 
-![Starting PPL](../../img/opt-125m-ppl_begin.png)
+<div align="center">
+  <img src="../../img/opt-125m-ppl_begin.png"  width="700px"/> 
+</div>
 
 At the end of the run:
 
-![End PPL](../../img/opt-125m-ppl_end.png)
+<div align="center">
+  <img src="../../img/opt-125m-ppl_end.png"  width="900px"/>
+</div>
 
 Its TensorBoard:
 
-![Tensorboard](../../img/opt-125m-tb.png)
-
+<div align="center">
+  <img src="../../img/opt-125m-tb.png"  width="900px"/>
+</div>
 
 ## Llama-2 Models
 
@@ -31,6 +36,7 @@ The DeepSpeed-Chat code supports Llama-2-xxb-hf versions of the Llama-2 models f
 4. Put the token content into a file e.g. `token`
 5. Uncomment the COPY token ... line in the dockerfile to include it in the container.
 
+See the recent [improvement update](https://github.com/microsoft/DeepSpeed/blob/master/blogs/deepspeed-chat/ds-chat-release-8-31/README.md) from DeepSpeed-Chat on Llama-2 support.
 
 # Set up
 
