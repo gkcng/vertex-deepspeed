@@ -61,10 +61,10 @@ if [[ -z ${IS_MULTINODE} ]];  then IS_MULTINODE=".is_multinode"; fi
 if [[ -z ${OUTPUT_FOLDER} ]]; then OUTPUT_FOLDER=$(echo ${AIP_MODEL_DIR} | sed -E -e 's|^gs:/|/gcs|' -e 's|/$||'); fi
 if [[ -z ${CHKPTS_FOLDER} ]]; then CHKPTS_FOLDER=$(echo ${AIP_CHECKPOINT_DIR} | sed -E -e 's|^gs:/|/gcs|' -e 's|/$||'); fi
 if [[ -z ${JOBLOG_FOLDER} ]]; then JOBLOG_FOLDER=$(echo ${AIP_TENSORBOARD_LOG_DIR} | sed -E -e 's|^gs:/|/gcs|' -e 's|/$||'); fi
-if [ ! -d "/gcs" ]; then # Create the folder under test conditions
-    sudo mkdir -p ${OUTPUT_FOLDER}; sudo chmod 777 -R ${OUTPUT_FOLDER}
-    sudo mkdir -p ${CHKPTS_FOLDER}; sudo chmod 777 -R ${CHKPTS_FOLDER}
-    sudo mkdir -p ${JOBLOG_FOLDER}; sudo chmod 777 -R ${JOBLOG_FOLDER}
+if [ ! -d "/gcs" ]; then # Create the folders under test conditions
+    OUTPUT_FOLDER="."${OUTPUT_FOLDER}; mkdir -p ${OUTPUT_FOLDER}
+    CHKPTS_FOLDER="."${CHKPTS_FOLDER}; mkdir -p ${CHKPTS_FOLDER}
+    JOBLOG_FOLDER="."${JOBLOG_FOLDER}; mkdir -p ${JOBLOG_FOLDER}
 fi
 
 # Checking the account running this
@@ -77,8 +77,6 @@ if [ -n "${TESTING}" ]; then
     echo "* Testing an example CLUSTER_SPEC and GCS $AIP_MODEL_DIR, ssh_setup not executed."
     echo "*"
     CLUSTER_SPEC='{"cluster":{"workerpool0":["workerpool0-9b6f87bcee-0:2222"],"workerpool1":["workerpool1-9b6f87bcee-0:2222","workerpool1-9b6f87bcee-1:2222"]},"task":{"type":"workerpool0","index":0}}'
-    sudo mkdir -p ${OUTPUT_FOLDER} # If ran under Vertex GCS is mounted at /gcs/
-    sudo chmod 777 -R ${OUTPUT_FOLDER}
 fi
 
 ####
