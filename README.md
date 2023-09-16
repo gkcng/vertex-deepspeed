@@ -25,9 +25,12 @@ To use this repository, choose one of the examples. Three examples are provided.
 1. The basic [ssh-only](examples/ssh-only) multi-node set up without DeepSpeed and its dependencies. Use this template for your own multi-node development on Vertex AI. The out of the box script will build and deploy without any training code. Deploy it with `enable_web_access=True` to verify the inter-node communication. The deployed cluster will be in an idle state for inspection and debugging. The `nodes` file in the home directory contains the hostnames of the cluster.
 
 <div align="center">
-  <img src="img/llama-2-7b-hf-ppl_begin.png"  width="700px"/> 
-  <span>A functional [example](examples/deepspeed-chat): supervised fine tuning Llama-2-7b across 2 hosts each with 4 A10040Gs.</span>
+   <figure>
+     <img src="img/llama-2-7b-hf-ppl_begin.png"  width="700px"/> 
+     <figcaption>A functional [example](examples/deepspeed-chat): supervised fine tuning Llama-2-7b across 2 hosts each with 4 A10040Gs.</figcaption>
+   </figure>   
 </div>
+
 
 ## Instructions
 
