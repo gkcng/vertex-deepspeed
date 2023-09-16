@@ -96,3 +96,12 @@ drwxr-xr-x  9 user  group    288 Sep  9 14:47 utils
 
 You are ready to try the [example](../../examples/deepspeed-chat/Vertex_DeepspeedChat.ipynb)
 
+
+# Related
+
+### Llama 2 on Vertex AI
+
+Among several [OSS models](https://cloud.google.com/blog/products/ai-machine-learning/vertex-ai-next-2023-announcements), Vertex AI now supports [Llama 2](https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/139) with both adapter tuning and Reinforcement Learning with Human Feedback (RLHF). This allows organizations to tune Llama 2 with their own enterprise data, while continuing to maintain full control and ownership of their data. Customers can tune these models in [Colab Enterprise](https://cloud.google.com/blog/products/ai-machine-learning/vertex-ai-colab-enterprise-and-mlops), a fully-managed data science notebook environment. 
+
+
+
