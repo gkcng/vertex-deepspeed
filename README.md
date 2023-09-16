@@ -28,8 +28,9 @@ To use this repository, choose one of the examples. Three examples are provided.
    <img src="img/llama-2-7b-hf-ppl_begin.png"  width="700px"/>   
 </div>
 
-<p style="text-align: center;">A functional [example](examples/deepspeed-chat): supervised fine tuning Llama-2-7b across 2 hosts each with 4 A10040Gs.</p>
-
+<div align="center">
+   <p>A functional [example](examples/deepspeed-chat): supervised fine tuning Llama-2-7b across 2 hosts each with 4 A10040Gs.</p>
+</div>
 
 ## Instructions
 
