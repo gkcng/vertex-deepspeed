@@ -2,7 +2,7 @@
 
 DeepSpeed introduced a general system framework for enabling an end-to-end training experience for ChatGPT-like models, named [DeepSpeed-Chat](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat).
 
-As a test to the Vertex-DeepSpeed container, this is a functional example executing a single supervised fine tuning epoch with [OPT-125m](https://huggingface.co/facebook/opt-125m), hosted on HuggingFace. The training code is adopted from DeepSpeed-Chat's [Step-1 Supervised Fine Tuning](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat/training/step1_supervised_finetuning). 
+As a test to the Vertex-DeepSpeed container, this is a functional example executing a single supervised fine tuning epoch with [OPT-125m](https://huggingface.co/facebook/opt-125m), as well as [Llama-2-7b-hf](https://huggingface.co/meta-llama/Llama-2-7b-hf) hosted on HuggingFace. The training code is adopted from DeepSpeed-Chat's [Step-1 Supervised Fine Tuning](https://github.com/microsoft/DeepSpeedExamples/tree/master/applications/DeepSpeed-Chat/training/step1_supervised_finetuning). 
 
 
 ## What you should expect
