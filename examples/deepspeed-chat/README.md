@@ -79,7 +79,7 @@ git clone https://github.com/microsoft/DeepSpeedExamples.git
 Given the relative location of this repo `./vertex-deepspeed`, copy the following over into the third_party directory:
 
 ```sh
-cp -R DeepSpeedExamples/applications/DeepSpeed-Chat/training/utils ./vertex-deepspeed/third_party/deepspeed_examples/
+cp -R DeepSpeedExamples/applications/DeepSpeed-Chat/dschat ./vertex-deepspeed/third_party/deepspeed_examples/
 ```
 
 ```sh
@@ -90,8 +90,8 @@ The deepspeed_examples directory should look like:
 ```sh
 $ ls -l ./vertex-deepspeed/third_party/deepspeed_examples/
 total 32
+drwxr-xr-x  9 user  group    288 Sep  9 14:47 dschat
 -rwxr-xr-x  1 user  group  13909 Sep  9 15:09 main.py
-drwxr-xr-x  9 user  group    288 Sep  9 14:47 utils
 ```
 
 You are ready to try the [example](../../examples/deepspeed-chat/Vertex_DeepspeedChat.ipynb)
